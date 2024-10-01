@@ -22,7 +22,11 @@ catch_dat <-
         format_catches(2024, ecoregion, 
                        hist, official, NULL, species_list, sid)
 
-
+catch_dat$COUNTRY[which(catch_dat$COUNTRY == "Russian Federation")] <- "Russia"
+catch_dat$COMMON_NAME[which(catch_dat$COMMON_NAME == "Atlantic mackerel")] <- "mackerel"
+catch_dat$COMMON_NAME[which(catch_dat$COMMON_NAME == "Atlantic horse mackerel")] <- "horse mackerel"
+catch_dat$COMMON_NAME[which(catch_dat$COMMON_NAME == "Atlantic cod")] <- "cod"
+catch_dat$COMMON_NAME[which(catch_dat$COMMON_NAME == "Atlantic herring")] <- "herring"
 
 # catches_frmt <- format_catches_noecoregion(hist, official, species_list, sid)
 
@@ -65,13 +69,14 @@ sag_complete_frmt <- format_sag(sag, sid)
 
 sag_complete_frmt <- sag_complete_frmt %>% filter(StockKeyLabel %in% sid$StockKeyLabel)
 
+#In greenland sea? does it still apply?
 sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "bli.27.5a14")] <- "802"
+
 
 #2023 update, do these still apply?, they do not show up
 sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "ple.27.7e")] <- "0.39"
 sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <- "11527.9"
 sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <- "0.0857"
-sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "bli.27.5a14")] <- "802"
 
 
 
@@ -81,11 +86,11 @@ write.taf(sag_complete_frmt, dir = "data", quote = TRUE)
 
 
 
-sag_status <- load_sag_status(2024)
+sag_status <- icesFO::load_sag_status(2024)
 
-names(sag_status)
+# names(sag_status)
 
-GS_stocks <-  c("aru.27.5a14",
+# GS_stocks <-  c("aru.27.5a14",
                 "usk.27.5a14",
                 # "her.27.1-24a514a",
                 "rng.27.1245a8914ab",
@@ -101,7 +106,7 @@ GS_stocks <-  c("aru.27.5a14",
                 "reb.2127.sp",
                 "reb.27.14b",
                 "reg.27.561214"
-)
+# )
 
 stocks <- unique(sag_complete_frmt$StockKeyLabel)
 sag_status <- dplyr::filter(sag_status, StockKeyLabel %in% stocks)
@@ -114,22 +119,10 @@ unique(clean_status$StockKeyLabel)
 # clean_status$X3A_CODE <- toupper(clean_status$X3A_CODE)
 # clean_status <- merge(clean_status,fish_category, all.x = T, all.y = F)
 
+
+
+
 # 3: STECF landings and effort
-
-landings1 <- read.taf("bootstrap/initial/data/Landings_2014.csv", check.names = TRUE)
-landings2 <- read.taf("bootstrap/initial/data/Landings_2015.csv", check.names = TRUE)
-landings3 <- read.taf("bootstrap/initial/data/Landings_2016.csv", check.names = TRUE)
-landings4 <- read.taf("bootstrap/initial/data/Landings_2017.csv", check.names = TRUE)
-landings5 <- read.taf("bootstrap/initial/data/Landings_2018.csv", check.names = TRUE)
-landings6 <- read.taf("bootstrap/initial/data/Landings_2019.csv", check.names = TRUE)
-landings7 <- read.taf("bootstrap/initial/data/Landings_2020.csv", check.names = TRUE)
-STECF_landings <- rbind(landings1, landings2, landings3, landings4, landings5, landings6, landings7)
-STECF_effort <- read.taf("bootstrap/initial/data/FDI effort by country.csv", check.names = TRUE)
-# names(landings)
-# landings$Sub.region <- tolower(landings$Sub.region)
-
-# landings_CS <- dplyr::filter(landings, grepl("27.6.a|27.7.b|27.7.j|27.7.g|27.7.a|
-#                                           27.7.h|27.7.f|27.6.b|27.7.c|27.7.k", Sub.region))
 
 # need to group gears, Sarah help.
 unique(STECF_landings$Gear.Type)
@@ -137,7 +130,7 @@ unique(STECF_landings$Gear.Type)
 STECF_landings <- dplyr::mutate(STECF_landings, gear_class = case_when(
   grepl("TBB", Gear.Type) ~ "Beam trawl",
   grepl("DRB|DRH|HMD", Gear.Type) ~ "Dredge",
-  grepl("GNS|GND|GTN|LHP|LLS|FPN|GTR|FYK|LLD|SDN|LTL|LNB", Gear.Type) ~ "Static/Gill net/LL",
+  grepl("GNS|GND|GNC|GTN|LHP|LLS|FPN|GTR|FYK|LLD|SDN|LTL|LNB", Gear.Type) ~ "Static/Gill net/LL",
   grepl("OTT|OTB|PTB|SSC|SB|SPR|SV", Gear.Type) ~ "Otter trawl/seine",
   grepl("PTM|OTM|PS", Gear.Type) ~ "Pelagic trawl/seine",
   grepl("FPO", Gear.Type) ~ "Pots",
@@ -151,7 +144,7 @@ STECF_landings <- dplyr::mutate(STECF_landings, gear_class = case_when(
 STECF_effort <- dplyr::mutate(STECF_effort, gear_class = case_when(
   grepl("TBB", Gear.Type) ~ "Beam trawl",
   grepl("DRB|DRH|HMD", Gear.Type) ~ "Dredge",
-  grepl("GNS|GND|GTN|LHP|LLS|FPN|GTR|FYK|LLD|SDN|LTL|LNB", Gear.Type) ~ "Static/Gill net/LL",
+  grepl("GNS|GND|GNC|GTN|LHP|LLS|FPN|GTR|FYK|LLD|SDN|LTL|LNB", Gear.Type) ~ "Static/Gill net/LL",
   grepl("OTT|OTB|PTB|SSC|SB|SPR|SV", Gear.Type) ~ "Otter trawl/seine",
   grepl("PTM|OTM|PS", Gear.Type) ~ "Pelagic trawl/seine",
   grepl("FPO", Gear.Type) ~ "Pots",

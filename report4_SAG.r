@@ -10,7 +10,7 @@ source("bootstrap/utilities.r")
 # set values for automatic naming of files:
 cap_year <- 2024
 cap_month <- "October"
-ecoreg_code <- "BtS"
+ecoreg_code <- "GS"
 
 ##########
 #Load data
@@ -155,9 +155,37 @@ p1_plot<-gridExtra::grid.arrange(kobe,
                                  respect = TRUE, top = "demersal")
 dev.off()
 
+
+
+#for top 20 demersal (NrS)
+
+bar_dat <- plot_CLD_bar(sag_catch_current, guild = "demersal", caption = T, cap_year , cap_month , return_data = TRUE)
+top_20 <- bar_dat %>% top_n(20, total)
+bar <- plot_CLD_bar_top(top_20, guild = "demersal", caption = TRUE, cap_year = 2024, cap_month = "October", return_data = FALSE)
+bar_dat <- plot_CLD_bar(top_20, guild = "demersal", caption = T, cap_year , cap_month , return_data = TRUE)
+write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_demersal_top20", ext = "csv", dir = "report"))
+
+# top_10 <- unique(top_10)
+kobe <- plot_kobe(top_20, guild = "demersal", caption = T, cap_year, cap_month , return_data = FALSE)
+png(file_name(cap_year,ecoreg_code,"SAG_Current_demersal_top20", ext = "png", dir = "report"),
+    width = 131.32,
+    height = 88.9,
+    units = "mm",
+    res = 300)
+p1_plot<-gridExtra::grid.arrange(kobe,
+                                 bar, ncol = 2,
+                                 respect = TRUE, top = "Top 10")
+dev.off()
+
+
+
+
+
 # 2. Pelagic
 #~~~~~~~~~~~
+#Only for Baltic
 sag_catch_current <- sag_catch_current %>% filter(StockKeyLabel != "sal.27.32")
+
 bar <- plot_CLD_bar(sag_catch_current, guild = "pelagic", caption = T, cap_year, cap_month , return_data = FALSE)
 
 
@@ -179,8 +207,10 @@ dev.off()
 #~~~~~~~~~~~
 bar <- plot_CLD_bar(sag_catch_current, guild = "crustacean", caption = T, cap_year, cap_month , return_data = FALSE)
 
-bar_dat <- plot_CLD_bar(catch_current, guild = "crustacean", caption = T, cap_year , cap_month , return_data = TRUE)
-write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_crustacean", ext = "csv"), dir = "report")
+bar_dat <- plot_CLD_bar(sag_catch_current, guild = "crustacean", caption = T, cap_year , cap_month , return_data = TRUE)
+write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_crustacean", ext = "csv", dir = "report"))
+#not work
+#write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_crustacean", ext = "csv"), dir = "report")
 
 kobe <- plot_kobe(sag_catch_current, guild = "crustacean", caption = T, cap_year , cap_month , return_data = FALSE)
 png(file_name(cap_year,ecoreg_code,"SAG_Current_crustacean", ext = "png", dir = "report"),
@@ -209,7 +239,7 @@ png(file_name(cap_year,ecoreg_code,"SAG_Current_benthic", ext = "png", dir = "re
     res = 300)
 p1_plot<-gridExtra::grid.arrange(kobe,
                                  bar, ncol = 2,
-                                 respect = TRUE, top = "pelagic")
+                                 respect = TRUE, top = "benthic")
 dev.off()
 
 
@@ -217,24 +247,23 @@ dev.off()
 #~~~~~~~~~~~
 bar <- plot_CLD_bar(sag_catch_current, guild = "All", caption = T, cap_year , cap_month , return_data = FALSE)
 
-bar_dat <- plot_CLD_bar(sag_catch_current, guild = "All", caption = T, cap_year , cap_month , return_data = TRUE)
+bar_dat <- plot_CLD_bar_top(sag_catch_current, guild = "All", caption = T, cap_year , cap_month , return_data = TRUE)
 write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_all", ext = "csv", dir = "report" ))
 
 top_10 <- bar_dat %>% top_n(10, total)
-bar <- plot_CLD_bar(top_10, guild = "All", caption = TRUE, cap_year = 2020, cap_month = "September", return_data = FALSE)
+bar <- plot_CLD_bar_top(top_10, guild = "All", caption = TRUE, cap_year = 2024, cap_month = "October", return_data = FALSE)
 
 # top_10 <- unique(top_10)
-kobe <- plot_kobe(sag_catch_current, guild = "All", caption = T, cap_year, cap_month , return_data = FALSE)
-png(file_name(cap_year,ecoreg_code,"SAG_Current_all", ext = "png", dir = "report"),
-    width = 137.32,
+kobe <- plot_kobe(top_10, guild = "All", caption = T, cap_year, cap_month , return_data = FALSE)
+png(file_name(cap_year,ecoreg_code,"SAG_Current_top10", ext = "png", dir = "report"),
+    width = 131.32,
     height = 88.9,
     units = "mm",
     res = 300)
 p1_plot<-gridExtra::grid.arrange(kobe,
                                  bar, ncol = 2,
-                                 respect = TRUE, top = "All stocks")
+                                 respect = TRUE, top = "Top 10")
 dev.off()
-
 
 #~~~~~~~~~~~~~~~#
 # C. Discards
@@ -243,21 +272,40 @@ dev.off()
 # No discards at all        
         
                 
-# discardsA <- plot_discard_trends(catch_trends, 2022, cap_year , cap_month )
-# 
-# dat <- plot_discard_trends(catch_trends, 2022, cap_year , cap_month , return_data = TRUE)
-# write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_trends", ext = "csv", dir = "report" ))
-# 
-# catch_trends2 <- catch_trends %>% filter(discards > 0)
-# discardsB <- plot_discard_current(catch_trends3, year,position_letter = "b)", cap_year , cap_month , caption = FALSE)
-# 
-# discardsC <- plot_discard_current(catch_trends, 2021,position_letter = "c)", cap_year, cap_month )
-# 
-# dat <- plot_discard_current(catch_trends, 2021, cap_year, cap_month , return_data = TRUE)
-# write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current", ext = "csv"), dir = "report" )
-# 
-# cowplot::plot_grid(discardsA, discardsC, align = "h", nrow = 1, rel_widths = 1, rel_heights = 1)
+discardsA <- plot_discard_trends(sag_catch_trends, 2024, cap_year , cap_month )
+
+dat <- plot_discard_trends(sag_catch_trends, 2024, cap_year , cap_month , return_data = TRUE)
+write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_trends", ext = "csv", dir = "report" ))
+
+catch_trends2 <- sag_catch_trends %>% filter(Discards > 0)
+discardsB <- plot_discard_current(catch_trends2, year,position_letter = "b)", cap_year , cap_month , caption = FALSE)
+dat <- plot_discard_current(catch_trends2, 2024, cap_year, cap_month , return_data = TRUE)
+#this does not work
+# write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_", ext = "csv"), dir = "report" )
+write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_onlydiscardsexist", ext = "csv", dir = "report" ))
+
+
+discardsC <- plot_discard_current(sag_catch_trends, 2024,position_letter = "c)", cap_year, cap_month )
+dat <- plot_discard_current(sag_catch_trends, 2024, cap_year, cap_month , return_data = TRUE)
+#this does not work
+#write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all", ext = "csv"), dir = "report" )
+write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all", ext = "csv", dir = "report" ))
+
+#this does not work
+# cowplot::plot_grid(discardsA, discardsB,discardsC, align = "h", nrow = 1, rel_widths = 1, rel_heights = 1)
 # ggplot2::ggsave(file_name(cap_year,ecoreg_code,"_FO_SAG_Discards", ext = "png"), path = "report/", width = 220.32, height = 88.9, units = "mm", dpi = 300)
+
+png(file_name(cap_year,ecoreg_code,"SAG_Discards", ext = "png", dir = "report"),
+    width = 220.32,
+    height = 88.9,
+    units = "mm",
+    res = 300)
+p1_plot<-gridExtra::grid.arrange(discardsA,
+                                 discardsB,
+                                 discardsC, ncol = 3,
+                                 respect = TRUE)
+dev.off()
+
 
 
 # png("report/2019_BI_FO_Figure7.png",
@@ -280,10 +328,14 @@ plot_status_prop_pies(clean_status, cap_month,cap_year)
 unique(clean_status$StockSize)
  
 clean_status$StockSize <- gsub("qual_GREEN", "GREEN", clean_status$StockSize)
+clean_status$StockSize <- gsub("qual_RED", "RED", clean_status$StockSize)
+
 
 unique(clean_status$FishingPressure)
 
 clean_status$FishingPressure <- gsub("qual_RED", "RED", clean_status$FishingPressure)
+clean_status$FishingPressure <- gsub("qual_GREEN", "GREEN", clean_status$FishingPressure)
+
 # plot_status_prop_pies(clean_status, "September", "2019")
 plot_status_prop_pies(clean_status, cap_month,cap_year)
 ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_ICESpies", ext = "png", dir = "report"), width = 178, height = 178, units = "mm", dpi = 300)

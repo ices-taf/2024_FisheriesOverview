@@ -8,9 +8,9 @@ taf.library(icesFO)
 
 mkdir("model")
 
-#For GS 2024  we remove mac and her
-sag_complete_frmt <- sag_complete_frmt%>% filter(StockKeyLabel != "mac.27.nea")
-sag_complete_frmt <- sag_complete_frmt%>% filter(StockKeyLabel != "her.27.1-24a514a")
+#For GS 2024  we remove mac and her?
+# sag_complete_frmt <- sag_complete_frmt%>% filter(StockKeyLabel != "mac.27.nea")
+# sag_complete_frmt <- sag_complete_frmt%>% filter(StockKeyLabel != "her.27.1-24a514a")
 
 unique(sag_complete_frmt$StockKeyLabel)
 
@@ -38,6 +38,7 @@ write.taf(sag_guild, dir = "model")
 #B.Trends and current catches, landings and discards
 
 sag_catch_trends <- CLD_trends(sag_complete_frmt)
+sag_catch_trends <- unique(sag_catch_trends)
 sag_catch_current <- stockstatus_CLD_current(sag_complete_frmt)
 
 write.taf(sag_catch_trends, dir = "model")
