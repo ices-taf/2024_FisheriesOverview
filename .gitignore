@@ -47,3 +47,12 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# png files
+*.png
+
+# Zipe files
+*.zip
+
+# csv files
+*.csv
