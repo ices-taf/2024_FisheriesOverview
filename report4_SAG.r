@@ -358,7 +358,7 @@ write.taf(dat, file= file_name(cap_year,ecoreg_code,"SAG_GESpies", ext = "csv", 
 #~~~~~~~~~~~~~~~#
 
 
-dat <- format_annex_table(clean_status, 2022)
+dat <- format_annex_table(clean_status, 2024)
 format_annex_table_html(dat,ecoreg_code,cap_year)
 
 write.taf(dat, file = file_name(cap_year,ecoreg_code,"annex_table", ext = "csv", dir = "report"), quote=TRUE)
