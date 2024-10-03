@@ -65,9 +65,12 @@ sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <
 
 
 
+
 sag_complete_frmt <- format_sag(sag, sid)
 
+
 sag_complete_frmt <- sag_complete_frmt %>% filter(StockKeyLabel %in% sid$StockKeyLabel)
+
 
 #In greenland sea? does it still apply?
 sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "bli.27.5a14")] <- "802"
@@ -81,12 +84,12 @@ sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <
 
 
 
+# 
+# write.taf(sag_complete_frmt, dir = "data", quote = TRUE)
 
-write.taf(sag_complete_frmt, dir = "data", quote = TRUE)
 
 
-
-sag_status <- icesFO::load_sag_status(2024)
+sag_status <- load_sag_status_new(sag)
 
 # names(sag_status)
 
@@ -108,18 +111,29 @@ sag_status <- icesFO::load_sag_status(2024)
                 "reg.27.561214"
 # )
 
-stocks <- unique(sag_complete_frmt$StockKeyLabel)
-sag_status <- dplyr::filter(sag_status, StockKeyLabel %in% stocks)
+# stocks <- unique(sag_complete_frmt$StockKeyLabel)
+# sag_status <- dplyr::filter(sag_status, StockKeyLabel %in% stocks)
 
-# sag_status <- dplyr::filter(sag_status, StockKeyLabel %in% GS_stocks)
-clean_status <- format_sag_status(sag_status, 2024, ecoregion)
+
+#rename the components of North Sea cod and remove the general assessment:
+
+sag_complete_frmt$StockKeyLabel[which(sag_complete_frmt$AssessmentKey == "18715")] <- "cod.27.46a7d20V"
+sag_complete_frmt$StockKeyLabel[which(sag_complete_frmt$AssessmentKey == "18719")] <- "cod.27.46a7d20NW"
+sag_complete_frmt$StockKeyLabel[which(sag_complete_frmt$AssessmentKey == "18716")] <- "cod.27.46a7d20S"
+
+sag_complete_frmt <- sag_complete_frmt %>% filter(AssessmentKey != "18680")
+
+sag_status$StockKeyLabel[which(sag_status$AssessmentKey == "18715")] <- "cod.27.46a7d20V"
+sag_status$StockKeyLabel[which(sag_status$AssessmentKey == "18719")] <- "cod.27.46a7d20NW"
+sag_status$StockKeyLabel[which(sag_status$AssessmentKey == "18716")] <- "cod.27.46a7d20S"
+
+sag_status <- sag_status %>% filter(AssessmentKey != "18680")
+
+
+clean_status <- format_sag_status_new(sag_status)
 unique(clean_status$StockKeyLabel)
-# 
-# clean_status <- dplyr::mutate(clean_status, X3A_CODE = substr(clean_status$StockKeyLabel, start = 1, stop = 3))
-# clean_status$X3A_CODE <- toupper(clean_status$X3A_CODE)
-# clean_status <- merge(clean_status,fish_category, all.x = T, all.y = F)
-
-
+names(clean_status)
+colnames(clean_status)<- c("StockKeyLabel", "AssessmentKey","lineDescription","FishingPressure", "StockSize","SBL","FisheriesGuild")
 
 
 # 3: STECF landings and effort

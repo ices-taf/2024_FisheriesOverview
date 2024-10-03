@@ -25,13 +25,23 @@ catch_dat <- read.taf("data/catch_dat.csv")
 # By common name
 #~~~~~~~~~~~~~~~#
 #Plot
-plot_catch_trends(catch_dat, type = "COMMON_NAME", line_count = 6, plot_type = "line")
+plot_catch_trends(catch_dat, type = "COMMON_NAME", line_count = 5, plot_type = "line")
 plot_catch_trends(catch_dat, type = "COMMON_NAME", line_count = 6, plot_type = "line")
 ggplot2::ggsave(paste0(year_cap, "_", ecoreg,"_FO_Catches_species.png"), path = "report/", width = 170, height = 100.5, units = "mm", dpi = 300)
 
 #data
-dat <- plot_catch_trends(catch_dat, type = "COMMON_NAME", line_count = 10, plot_type = "line", return_data = TRUE)
+dat <- plot_catch_trends(catch_dat, type = "COMMON_NAME", line_count = 11, plot_type = "line", return_data = TRUE)
 write.taf(dat, paste0(year_cap, "_", ecoreg,"_FO_Catches_species.csv"), dir = "report")
+
+
+#for North sea:
+
+dat <- plot_catch_trends(catch_dat, type = "COMMON_NAME", line_count = 11, plot_type = "line", return_data = TRUE)
+dat <- dat %>% group_by(type_var) %>% mutate(rank = sum(typeTotal)) 
+dat1 <- dat %>% group_by(type_var)%>% filter(top_n(5, rank))
+dat1 <- dat %>% group_by(type_var)%>%
+  arrange(desc(rank)) %>%  # Sort by 'Value' in descending order
+  slice_head(n = 5) 
 
 
 #~~~~~~~~~~~~~~~#

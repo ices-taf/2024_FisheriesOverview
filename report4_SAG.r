@@ -10,7 +10,7 @@ source("bootstrap/utilities.r")
 # set values for automatic naming of files:
 cap_year <- 2024
 cap_month <- "October"
-ecoreg_code <- "GS"
+ecoreg_code <- "NrS"
 
 ##########
 #Load data
@@ -54,11 +54,10 @@ unique(sag_trends$FisheriesGuild)
 # 3. Crustacean
 #~~~~~~~~~~~
 plot_stock_trends(sag_trends, guild="crustacean", cap_year , cap_month ,return_data = FALSE )
-ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_Trends_crustacean", ext = "png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
+ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_Trends_crustacean", ext = "png", dir = "report"), width = 178, height = 130, units = "mm", dpi = 300)
 
-dat <- plot_stock_trends(trends, guild="crustacean", cap_year , cap_month , return_data = TRUE)
-write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Trends_crustacean", ext = "csv"), dir = "report" )
-
+dat <- plot_stock_trends(sag_trends, guild="crustacean", cap_year , cap_month , return_data = TRUE)
+write.taf(dat,file =file_name(cap_year,ecoreg_code,"SAG_Trends_crustacean", ext = "csv", dir = "report"))
 
 # 4. Benthic
 #~~~~~~~~~~~
@@ -75,7 +74,7 @@ write.taf(dat,file =file_name(cap_year,ecoreg_code,"SAG_Trends_benthic", ext = "
 plot_stock_trends(sag_trends, guild="elasmobranch", cap_year, cap_month , return_data = FALSE)
 ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_Trends_elasmobranch", ext = "png", dir = "report"), width = 178, height = 130, units = "mm", dpi = 300)
 
-dat <- plot_stock_trends(trends, guild="elasmobranch", cap_year, cap_month , return_data = TRUE)
+dat <- plot_stock_trends(sag_trends, guild="elasmobranch", cap_year, cap_month , return_data = TRUE)
 write.taf(dat,file =file_name(cap_year,ecoreg_code,"SAG_Trends_elasmobranch", ext = "csv", dir = "report"))
 
 
@@ -158,14 +157,11 @@ dev.off()
 
 
 #for top 20 demersal (NrS)
-
-bar_dat <- plot_CLD_bar(sag_catch_current, guild = "demersal", caption = T, cap_year , cap_month , return_data = TRUE)
 top_20 <- bar_dat %>% top_n(20, total)
-bar <- plot_CLD_bar_top(top_20, guild = "demersal", caption = TRUE, cap_year = 2024, cap_month = "October", return_data = FALSE)
+bar <- plot_CLD_bar(top_20, guild = "demersal", caption = TRUE, cap_year = 2024, cap_month = "October", return_data = FALSE)
 bar_dat <- plot_CLD_bar(top_20, guild = "demersal", caption = T, cap_year , cap_month , return_data = TRUE)
 write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_demersal_top20", ext = "csv", dir = "report"))
 
-# top_10 <- unique(top_10)
 kobe <- plot_kobe(top_20, guild = "demersal", caption = T, cap_year, cap_month , return_data = FALSE)
 png(file_name(cap_year,ecoreg_code,"SAG_Current_demersal_top20", ext = "png", dir = "report"),
     width = 131.32,
@@ -174,7 +170,7 @@ png(file_name(cap_year,ecoreg_code,"SAG_Current_demersal_top20", ext = "png", di
     res = 300)
 p1_plot<-gridExtra::grid.arrange(kobe,
                                  bar, ncol = 2,
-                                 respect = TRUE, top = "Top 10")
+                                 respect = TRUE, top = "Top 20 demersal")
 dev.off()
 
 
@@ -185,6 +181,11 @@ dev.off()
 #~~~~~~~~~~~
 #Only for Baltic
 sag_catch_current <- sag_catch_current %>% filter(StockKeyLabel != "sal.27.32")
+
+#only for North Sea
+
+sag_catch_current <- sag_catch_current %>% filter(StockKeyLabel != "her.27.1-24a514a")
+
 
 bar <- plot_CLD_bar(sag_catch_current, guild = "pelagic", caption = T, cap_year, cap_month , return_data = FALSE)
 
@@ -247,7 +248,7 @@ dev.off()
 #~~~~~~~~~~~
 bar <- plot_CLD_bar(sag_catch_current, guild = "All", caption = T, cap_year , cap_month , return_data = FALSE)
 
-bar_dat <- plot_CLD_bar_top(sag_catch_current, guild = "All", caption = T, cap_year , cap_month , return_data = TRUE)
+bar_dat <- plot_CLD_bar(sag_catch_current, guild = "All", caption = T, cap_year , cap_month , return_data = TRUE)
 write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_all", ext = "csv", dir = "report" ))
 
 top_10 <- bar_dat %>% top_n(10, total)
@@ -262,7 +263,7 @@ png(file_name(cap_year,ecoreg_code,"SAG_Current_top10", ext = "png", dir = "repo
     res = 300)
 p1_plot<-gridExtra::grid.arrange(kobe,
                                  bar, ncol = 2,
-                                 respect = TRUE, top = "Top 10")
+                                 respect = TRUE, top = "All Top 10")
 dev.off()
 
 #~~~~~~~~~~~~~~~#
@@ -356,6 +357,9 @@ write.taf(dat, file= file_name(cap_year,ecoreg_code,"SAG_GESpies", ext = "csv", 
 #~~~~~~~~~~~~~~~#
 #F. ANNEX TABLE 
 #~~~~~~~~~~~~~~~#
+
+
+write.csv(clean_status, file= file_name(cap_year,ecoreg_code,"SAG_StockStatus", ext = "csv", dir = "report"))
 
 
 dat <- format_annex_table(clean_status, 2024)
