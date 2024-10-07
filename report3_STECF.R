@@ -26,6 +26,8 @@ STECF_landings_BtS <- dplyr::filter(STECF_landings, grepl("27.3.B|27.3.C.22|27.3
 STECF_landings_NrS <- dplyr::filter(STECF_landings, grepl("27.4.A|27.4.B|27.4.C|27.4.D|27.4.E", Sub.region))
 
 
+STECF_landings_BI <- dplyr::filter(STECF_landings, grepl("27.8.A|27.8.B|27.8.C|27.8.D|27.8.E|
+                                          27.9.A|27.9.B", Sub.region))
 
 
 effort_BtS$total.kW.days.at.Sea <- effort_BtS$Total.kW.days.at.sea
@@ -396,7 +398,7 @@ plot_stecf <- function(df, type, variable = NULL, cap_year, cap_month, line_coun
 
 
         #Plot
-plot_stecf(STECF_landings_NrS,type = "landings", variable= "GEAR", "2024","October", 9, "23-10")
+plot_stecf(STECF_landings_BI,type = "landings", variable= "GEAR", "2024","October", 9, "23-10")
 ggplot2::ggsave(paste0(cap_year, "_", ecoregion,"_FO_STECF_landings.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
         #dat
 dat <- plot_stecf(STECF_landings_BtS, type = "landings", variable="landings", "2019","August", 9, "15-23", return_data = TRUE)

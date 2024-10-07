@@ -10,7 +10,7 @@ source("bootstrap/utilities.r")
 # set values for automatic naming of files:
 cap_year <- 2024
 cap_month <- "October"
-ecoreg_code <- "NrS"
+ecoreg_code <- "BI"
 
 ##########
 #Load data
@@ -251,6 +251,20 @@ bar <- plot_CLD_bar(sag_catch_current, guild = "All", caption = T, cap_year , ca
 bar_dat <- plot_CLD_bar(sag_catch_current, guild = "All", caption = T, cap_year , cap_month , return_data = TRUE)
 write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_all", ext = "csv", dir = "report" ))
 
+kobe <- plot_kobe(sag_catch_current, guild = "All", caption = T, cap_year, cap_month , return_data = FALSE)
+png(file_name(cap_year,ecoreg_code,"SAG_Current_All", ext = "png", dir = "report"),
+    width = 131.32,
+    height = 88.9,
+    units = "mm",
+    res = 300)
+p1_plot<-gridExtra::grid.arrange(kobe,
+                                 bar, ncol = 2,
+                                 respect = TRUE, top = "All")
+dev.off()
+
+
+
+#Only top 10
 top_10 <- bar_dat %>% top_n(10, total)
 bar <- plot_CLD_bar_top(top_10, guild = "All", caption = TRUE, cap_year = 2024, cap_month = "October", return_data = FALSE)
 
@@ -337,7 +351,6 @@ unique(clean_status$FishingPressure)
 clean_status$FishingPressure <- gsub("qual_RED", "RED", clean_status$FishingPressure)
 clean_status$FishingPressure <- gsub("qual_GREEN", "GREEN", clean_status$FishingPressure)
 
-# plot_status_prop_pies(clean_status, "September", "2019")
 plot_status_prop_pies(clean_status, cap_month,cap_year)
 ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_ICESpies", ext = "png", dir = "report"), width = 178, height = 178, units = "mm", dpi = 300)
 

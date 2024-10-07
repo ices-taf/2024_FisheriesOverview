@@ -48,7 +48,7 @@ dat1 <- dat %>% group_by(type_var)%>%
 # By country
 #~~~~~~~~~~~~~~~#
 #Plot
-plot_catch_trends(catch_dat, type = "COUNTRY", line_count = 9, plot_type = "area")
+plot_catch_trends(catch_dat, type = "COUNTRY", line_count = 3, plot_type = "area")
 ggplot2::ggsave(paste0(year_cap, "_", ecoreg,"_FO_Catches_country.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
 
 #data
@@ -61,7 +61,7 @@ write.taf(dat, file= paste0(year_cap, "_", ecoreg,"_FO_Catches_country.csv"), di
 
 #Plot
 #shoudl be able to remove the "other" part
-plot_catch_trends(catch_dat, type = "GUILD", line_count = 3, plot_type = "line")
+plot_catch_trends(catch_dat, type = "GUILD", line_count = 6, plot_type = "line")
 ggplot2::ggsave(paste0(year_cap, "_", ecoreg,"_FO_Catches_guild.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
 
 #data
