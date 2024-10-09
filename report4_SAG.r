@@ -10,7 +10,7 @@ source("bootstrap/utilities.r")
 # set values for automatic naming of files:
 cap_year <- 2024
 cap_month <- "October"
-ecoreg_code <- "BI"
+ecoreg_code <- "NrS"
 
 ##########
 #Load data
@@ -372,11 +372,13 @@ write.taf(dat, file= file_name(cap_year,ecoreg_code,"SAG_GESpies", ext = "csv", 
 #~~~~~~~~~~~~~~~#
 
 
-write.csv(clean_status, file= file_name(cap_year,ecoreg_code,"SAG_StockStatus", ext = "csv", dir = "report"))
+
+
+# write.csv(clean_status, file= file_name(cap_year,ecoreg_code,"SAG_StockStatus", ext = "csv", dir = "report"))
 
 
 dat <- format_annex_table(clean_status, 2024)
-format_annex_table_html(dat,ecoreg_code,cap_year)
+# format_annex_table_html(dat,ecoreg_code,cap_year)
 
 write.taf(dat, file = file_name(cap_year,ecoreg_code,"annex_table", ext = "csv", dir = "report"), quote=TRUE)
 

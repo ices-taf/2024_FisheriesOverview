@@ -108,6 +108,11 @@ sag_complete_frmt <- format_sag(sag, sid)
 #This should not do much, maybe we can delete
 sag_complete_frmt <- sag_complete_frmt %>% filter(StockKeyLabel %in% sid$StockKeyLabel)
 
+# Removing Russian stocks for Barents Sea
+out <- c("cap.27.1-2","cod.27.1-2","ghl.27.1-2","had.27.1-2", "reb.27.1-2")
+library(operators)
+sag_complete_frmt <- dplyr::filter(sag_complete_frmt, StockKeyLabel %!in% out)
+detach("package:operators", unload=TRUE)
 
 #2024 update
 sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "bli.27.5a14")] <- "800"
@@ -170,9 +175,11 @@ sag_status$StockKeyLabel[which(sag_status$AssessmentKey == "19017")] <- "ane.27.
 
 sag_status <- sag_status %>% filter(AssessmentKey != "18680")
 
+library(operators)
+sag_status <- dplyr::filter(sag_status, StockKeyLabel %!in% out)
+detach("package:operators", unload=TRUE)
 
 clean_status <- format_sag_status_new(sag_status, sid)
-unique(clean_status$StockKeyLabel)
 names(clean_status)
 colnames(clean_status)<- c("StockKeyLabel", "AssessmentKey","lineDescription","FishingPressure", "StockSize","SBL","FisheriesGuild")
 
