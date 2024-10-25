@@ -5,7 +5,7 @@ library(ggplot2)
 library(dplyr)
 
 ## Run utilies
-source("bootstrap/utilities.r")
+source("boot/utilities.r")
 
 # set values for automatic naming of files:
 cap_year <- 2024
@@ -15,9 +15,9 @@ ecoreg_code <- "NrS"
 ##########
 #Load data
 ##########
-trends <- read.taf("model/trends.csv")
-catch_current <- read.taf("model/catch_current.csv")
-catch_trends <- read.taf("model/catch_trends.csv")
+trends <- read.taf("model/sag_trends.csv")
+catch_current <- read.taf("model/sag_catch_current.csv")
+catch_trends <- read.taf("model/sag_catch_trends.csv")
 
 #error with number of columns, to check
 clean_status <- read.taf("data/clean_status.csv")
@@ -293,7 +293,7 @@ dat <- plot_discard_trends(sag_catch_trends, 2024, cap_year , cap_month , return
 write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_trends", ext = "csv", dir = "report" ))
 
 catch_trends2 <- sag_catch_trends %>% filter(Discards > 0)
-discardsB <- plot_discard_current(catch_trends2, year,position_letter = "b)", cap_year , cap_month , caption = FALSE)
+discardsB <- plot_discard_current(catch_trends2, 2024,position_letter = "b)", cap_year , cap_month , caption = FALSE)
 dat <- plot_discard_current(catch_trends2, 2024, cap_year, cap_month , return_data = TRUE)
 #this does not work
 # write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_", ext = "csv"), dir = "report" )

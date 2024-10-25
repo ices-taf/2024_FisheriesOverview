@@ -11,7 +11,7 @@ mkdir("report")
 # set values for automatic naming of files:
 cap_year <- 2024
 cap_month <- "October"
-ecoreg_code <- "BrS"
+ecoreg_code <- "BI"
 
 ###########
 ##Load data

@@ -48,7 +48,8 @@ dat1 <- dat %>% group_by(type_var)%>%
 # By country
 #~~~~~~~~~~~~~~~#
 #Plot
-plot_catch_trends(catch_dat, type = "COUNTRY", line_count = 9, plot_type = "area")
+catch_dat$COUNTRY[which(catch_dat$COUNTRY == "Russian Federation")] <- "Russia"
+plot_catch_trends(catch_dat, type = "COUNTRY", line_count = 5, plot_type = "area")
 ggplot2::ggsave(paste0(year_cap, "_", ecoreg,"_FO_Catches_country.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
 
 #data
