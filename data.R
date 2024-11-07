@@ -8,19 +8,33 @@ mkdir("data")
 
 
 # load species list
-species_list <- read.taf("bootstrap/initial/data/FAO_ASFIS_species/species_list.csv")
-sid <- read.taf("bootstrap/initial/data/ICES_StockInformation/sid.csv")
-
+species_list <- read.taf("boot/initial/data/species_list.csv")
+sid <- read.taf("boot/initial/data/sid.csv")
+sag <- read.taf("boot/initial/data/sag.csv")
 
 # 1: ICES official catch statistics
 
-hist <- read.taf("bootstrap/initial/data/ICES_nominal_catches/ICES_historical_catches.csv")
-official <- read.taf("bootstrap/initial/data/ICES_nominal_catches/ICES_2006_2019_catches.csv")
-prelim <- read.taf("bootstrap/initial/data/ICES_nominal_catches/ICES_preliminary_catches.csv")
+hist <- read.taf("boot/initial/data/ICES_historical_catches.csv")
+official <- read.taf("boot/initial/data/ICES_2006_2020_catches.csv")
+# prelim <- read.taf("bootstrap/initial/data/ICES_nominal_catches/ICES_preliminary_catches.csv")
 
 catch_dat <- 
         format_catches(2024, ecoregion, 
                        hist, official, NULL, species_list, sid)
+
+
+
+out <-unique(grep("erring", catch_dat$COMMON_NAME, value = TRUE))
+#[1] "Pacific herring"  "Atlantic herring"
+out2<-unique(grep("ackerel", catch_dat$COMMON_NAME, value = TRUE))
+out3<-unique(grep("lue whiting", catch_dat$COMMON_NAME, value = TRUE))
+out <- append(out, out2)
+out <- append(out, out3)
+
+# library(operators)
+catch_dat <- dplyr::filter(catch_dat, !COMMON_NAME %in% out)
+# detach("package:operators", unload=TRUE)
+
 
 catch_dat$COUNTRY[which(catch_dat$COUNTRY == "Russian Federation")] <- "Russia"
 catch_dat$COMMON_NAME[which(catch_dat$COMMON_NAME == "Atlantic mackerel")] <- "mackerel"
@@ -68,7 +82,7 @@ catch_dat <- unique(catch_dat)
 # catches_frmt <- format_catches_noecoregion(hist, official, species_list, sid)
 
 
-write.taf(catches_frmt, dir = "data", quote = TRUE)
+write.taf(catch_dat, dir = "data", quote = TRUE)
 
 
 # need to improve the attribution to guilds already from here.
@@ -99,8 +113,16 @@ sag_complete$FMSY[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 0.176
 sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 67743
 
 
+# 2022 update: this still applies: ??
+sag$FMSY[which(sag$FishStock == "pok.27.1-2")] <- 0.32
+sag$MSYBtrigger[which(sag$FishStock == "pok.27.1-2")] <- 220000
 
+sag$FMSY[which(sag$FishStock == "cod.27.1-2.coastN")] <- 0.176
+sag$MSYBtrigger[which(sag$FishStock == "cod.27.1-2.coastN")] <- 67743
 
+# sag_complete$FMSY[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 0.32
+sag$MSYBtrigger[which(sag$FishStock == "reg.27.1-2")] <- 68600 #PA
+sag$MSYBtrigger[which(sag$FishStock == "cap.27.1-2")] <- 200000 #PA
 
 
 sag_complete_frmt <- format_sag(sag, sid)
@@ -124,7 +146,13 @@ sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "spr.27.7
 sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <- "0.0857"
 
 
+#2024 update: Still aplying?
+# 2022 update: this still applies:
+# sag_complete$FMSY[which(sag_complete$FishStock == "pok.27.1-2")] <- 0.32
+# sag_complete$MSYBtrigger[which(sag_complete$FishStock == "pok.27.1-2")] <- 220000
 
+# sag_complete$FMSY[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 0.176
+# sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 67743
 
 # 
 # write.taf(sag_complete_frmt, dir = "data", quote = TRUE)
@@ -133,6 +161,31 @@ sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <
 
 sag_status <- load_sag_status_new(sag)
 
+<<<<<<< HEAD
+=======
+# names(sag_status)
+
+Barents_stockList <- c("aru.27.123a4",
+                       "cap.27.1-2",
+                       "cod.27.1-2",
+                       "cod.27.1-2.coastN",
+                       "gfb.27.nea",
+                       "ghl.27.1-2",
+                       "had.27.1-2",
+                       "lin.27.1-2",
+                       "pok.27.1-2",
+                       "pra.27.1-2",
+                       "reb.27.1-2",
+                       "reg.27.1-2",
+                       "rjr.27.23a4",
+                       "rng.27.1245a8914ab",
+                       "tsu.27.nea",
+                       "usk.27.1-2")
+
+# stocks <- unique(sag_complete_frmt$StockKeyLabel)
+# sag_status <- dplyr::filter(sag_status, StockKeyLabel %in% stocks)
+
+>>>>>>> ea4aae232f87f06e1ccf029629d42c9108689e96
 
 #rename the components of North Sea cod and ane in 9a and remove the general assessment:
 
