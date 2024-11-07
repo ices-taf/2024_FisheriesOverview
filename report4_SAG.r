@@ -9,8 +9,8 @@ source("boot/utilities.r")
 
 # set values for automatic naming of files:
 cap_year <- 2024
-cap_month <- "October"
-ecoreg_code <- "NrS"
+cap_month <- "November"
+ecoreg_code <- "NwS"
 
 ##########
 #Load data
@@ -35,18 +35,18 @@ unique(sag_trends$FisheriesGuild)
 
 # 1. Demersal
 #~~~~~~~~~~~
-plot_stock_trends(sag_trends, guild="demersal", cap_year , cap_month , return_data = FALSE)
+plot_stock_trends(trends, guild="demersal", cap_year , cap_month , return_data = FALSE)
 ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_Trends_demersal", ext = "png", dir = "report"), width = 178, height = 130, units = "mm", dpi = 300)
 
-dat <- plot_stock_trends(sag_trends, guild="demersal", cap_year , cap_month , return_data = TRUE)
+dat <- plot_stock_trends(trends, guild="demersal", cap_year , cap_month , return_data = TRUE)
 write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Trends_demersal", ext = "csv", dir = "report"))
 
 # 2. Pelagic
 #~~~~~~~~~~~
-plot_stock_trends(sag_trends, guild="pelagic", cap_year, cap_month , return_data = FALSE)
+plot_stock_trends(trends, guild="pelagic", cap_year, cap_month , return_data = FALSE)
 ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_Trends_pelagic", ext = "png", dir = "report"), width = 178, height = 130, units = "mm", dpi = 300)
 
-dat <- plot_stock_trends(sag_trends, guild="pelagic", cap_year, cap_month , return_data = TRUE)
+dat <- plot_stock_trends(trends, guild="pelagic", cap_year, cap_month , return_data = TRUE)
 write.taf(dat,file =file_name(cap_year,ecoreg_code,"SAG_Trends_pelagic", ext = "csv", dir = "report"))
 
 unique(sag_trends$FisheriesGuild)
@@ -61,20 +61,24 @@ write.taf(dat,file =file_name(cap_year,ecoreg_code,"SAG_Trends_crustacean", ext 
 
 # 4. Benthic
 #~~~~~~~~~~~
-plot_stock_trends(sag_trends, guild="benthic", cap_year, cap_month , return_data = FALSE)
+plot_stock_trends(trends, guild="benthic", cap_year, cap_month , return_data = FALSE)
 ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_Trends_benthic", ext = "png", dir = "report"), width = 178, height = 130, units = "mm", dpi = 300)
 
-dat <- plot_stock_trends(sag_trends, guild="benthic", cap_year, cap_month , return_data = TRUE)
+dat <- plot_stock_trends(trends, guild="benthic", cap_year, cap_month , return_data = TRUE)
 write.taf(dat,file =file_name(cap_year,ecoreg_code,"SAG_Trends_benthic", ext = "csv", dir = "report"))
 
 
 
 # 5. Elasmobranch
 #~~~~~~~~~~~
-plot_stock_trends(sag_trends, guild="elasmobranch", cap_year, cap_month , return_data = FALSE)
+# unique(sag_trends$Metric)
+# # filter for Stcokkeylable dgs.27.nea
+# sag_trendsdsg <- sag_trends %>% filter(StockKeyLabel == "dgs.27.nea")
+# unique(sag_trendsdsg$Metric)
+plot_stock_trends(trends, guild="elasmobranch", cap_year, cap_month , return_data = FALSE)
 ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_Trends_elasmobranch", ext = "png", dir = "report"), width = 178, height = 130, units = "mm", dpi = 300)
 
-dat <- plot_stock_trends(sag_trends, guild="elasmobranch", cap_year, cap_month , return_data = TRUE)
+dat <- plot_stock_trends(trends, guild="elasmobranch", cap_year, cap_month , return_data = TRUE)
 write.taf(dat,file =file_name(cap_year,ecoreg_code,"SAG_Trends_elasmobranch", ext = "csv", dir = "report"))
 
 
@@ -95,9 +99,9 @@ trends2 <- trends%>% filter (StockKeyLabel %in% c("cod.2127.1f14",
                                                   "reg.27.561214"))
 trends2 <- trends2 [,-1]
 colnames(trends2) <- c("FisheriesGuild", "Year", "Metric", "Value")
-trends3 <- trends2%>% filter(Metric == "F_FMSY")
+trends3 <- trends %>% filter(Metric == "F_FMSY")
 # guild2 <- guild %>% filter(Metric == "F_FMSY")
-plot_guild_trends(trends3, cap_year, cap_month,return_data = FALSE )
+plot_guild_trends(trends, cap_year, cap_month,return_data = FALSE )
 # guild2 <- guild2 %>% filter(FisheriesGuild != "MEAN")
 # plot_guild_trends(guild2, cap_year , cap_month,return_data = FALSE )
 ggplot2::ggsave(paste0(cap_year, "_", ecoreg_code, "_EO_SAG_GuildTrends_F.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
@@ -377,7 +381,7 @@ write.taf(dat, file= file_name(cap_year,ecoreg_code,"SAG_GESpies", ext = "csv", 
 # write.csv(clean_status, file= file_name(cap_year,ecoreg_code,"SAG_StockStatus", ext = "csv", dir = "report"))
 
 
-dat <- format_annex_table(clean_status, 2024)
+dat <- format_annex_table(clean_status, 2024, sid)
 # format_annex_table_html(dat,ecoreg_code,cap_year)
 
 write.taf(dat, file = file_name(cap_year,ecoreg_code,"annex_table", ext = "csv", dir = "report"), quote=TRUE)

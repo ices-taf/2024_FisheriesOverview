@@ -29,7 +29,7 @@ sag_trends <- trends[!(trends$StockKeyLabel == "whb.27.1-91214" & trends$Metric 
                          !(trends$StockKeyLabel == "MEAN" & trends$Metric == "SSB_MSYBtrigger" & trends$Year == 2023),]
 
 
-
+# test <- sag_complete_frmt %>% filter(StockKeyLabel == "dgs.27.nea")
 sag_guild <- guild_trends(sag_complete_frmt)
 
 write.taf(sag_trends, dir = "model")
@@ -38,7 +38,7 @@ write.taf(sag_guild, dir = "model")
 #B.Trends and current catches, landings and discards
 
 sag_catch_trends <- CLD_trends(sag_complete_frmt)
-sag_catch_trends <- unique(sag_catch_trends)
+# sag_catch_trends <- unique(sag_catch_trends)
 sag_catch_current <- stockstatus_CLD_current(sag_complete_frmt)
 
 write.taf(sag_catch_trends, dir = "model")

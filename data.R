@@ -15,7 +15,7 @@ sag <- read.taf("boot/initial/data/sag.csv")
 # 1: ICES official catch statistics
 
 hist <- read.taf("boot/initial/data/ICES_historical_catches.csv")
-official <- read.taf("boot/initial/data/ICES_2006_2020_catches.csv")
+official <- read.taf("boot/initial/data/ICES_2006_2022_catches.csv")
 # prelim <- read.taf("bootstrap/initial/data/ICES_nominal_catches/ICES_preliminary_catches.csv")
 
 catch_dat <- 
@@ -78,7 +78,11 @@ catch_dat$GUILD[which(catch_dat$COMMON_NAME == "Pacific cupped oyster")] <- "cru
 catch_dat$GUILD <- tolower(catch_dat$GUILD)
 
 catch_dat <- unique(catch_dat)
-
+dim(catch_dat_test)
+dim(catch_dat)
+# find dumplicates
+duplicates <- catch_dat[duplicated(catch_dat),]
+unique(duplicates$VALUE)
 # catches_frmt <- format_catches_noecoregion(hist, official, species_list, sid)
 
 
@@ -114,15 +118,15 @@ sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <
 
 
 # 2022 update: this still applies: ??
-sag$FMSY[which(sag$FishStock == "pok.27.1-2")] <- 0.32
-sag$MSYBtrigger[which(sag$FishStock == "pok.27.1-2")] <- 220000
+# sag$FMSY[which(sag$FishStock == "pok.27.1-2")] <- 0.32
+# sag$MSYBtrigger[which(sag$FishStock == "pok.27.1-2")] <- 220000
 
-sag$FMSY[which(sag$FishStock == "cod.27.1-2.coastN")] <- 0.176
-sag$MSYBtrigger[which(sag$FishStock == "cod.27.1-2.coastN")] <- 67743
+# sag$FMSY[which(sag$FishStock == "cod.27.1-2.coastN")] <- 0.176
+# sag$MSYBtrigger[which(sag$FishStock == "cod.27.1-2.coastN")] <- 67743
 
-# sag_complete$FMSY[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 0.32
-sag$MSYBtrigger[which(sag$FishStock == "reg.27.1-2")] <- 68600 #PA
-sag$MSYBtrigger[which(sag$FishStock == "cap.27.1-2")] <- 200000 #PA
+# # sag_complete$FMSY[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 0.32
+# sag$MSYBtrigger[which(sag$FishStock == "reg.27.1-2")] <- 68600 #PA
+# sag$MSYBtrigger[which(sag$FishStock == "cap.27.1-2")] <- 200000 #PA
 
 
 sag_complete_frmt <- format_sag(sag, sid)
@@ -134,28 +138,34 @@ sag_complete_frmt <- sag_complete_frmt %>% filter(StockKeyLabel %in% sid$StockKe
 out <- c("cap.27.1-2","cod.27.1-2","ghl.27.1-2","had.27.1-2", "reb.27.1-2")
 library(operators)
 sag_complete_frmt <- dplyr::filter(sag_complete_frmt, StockKeyLabel %!in% out)
+##solution without operators
+sag_complete_frmt <- dplyr::filter(sag_complete_frmt, !StockKeyLabel %in% out)
+# 
 detach("package:operators", unload=TRUE)
 
 #2024 update
-sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "bli.27.5a14")] <- "800"
+sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "bli.27.5a14")] <- 800
 
 
 #2023 update, do these still apply?, they do not show up
-sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "ple.27.7e")] <- "0.39"
-sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <- "11527.9"
-sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <- "0.0857"
+sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "ple.27.7e")] <- 0.39
+sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <- 11527.9
+sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <- 0.0857
 
 
 #2024 update: Still aplying?
 # 2022 update: this still applies:
-# sag_complete$FMSY[which(sag_complete$FishStock == "pok.27.1-2")] <- 0.32
-# sag_complete$MSYBtrigger[which(sag_complete$FishStock == "pok.27.1-2")] <- 220000
+sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "pok.27.1-2")] <- 0.32
+sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$FishSStockKeyLabeltock == "pok.27.1-2")] <- 226430
 
-# sag_complete$FMSY[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 0.176
-# sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 67743
+sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "cod.27.1-2.coastN")] <- 0.176
+# sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 46723
+
+sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "dgs.27.nea")] <- 0.043
+sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "dgs.27.nea")] <- 650770
 
 # 
-# write.taf(sag_complete_frmt, dir = "data", quote = TRUE)
+write.taf(sag_complete_frmt, dir = "data", quote = TRUE)
 
 
 
@@ -204,12 +214,14 @@ sag_status <- sag_status %>% filter(AssessmentKey != "18680")
 
 library(operators)
 sag_status <- dplyr::filter(sag_status, StockKeyLabel %!in% out)
+##solution without operators
+sag_status <- dplyr::filter(sag_status, !StockKeyLabel %in% out)
 detach("package:operators", unload=TRUE)
 
 clean_status <- format_sag_status_new(sag_status, sid)
 names(clean_status)
 colnames(clean_status)<- c("StockKeyLabel", "AssessmentKey","lineDescription","FishingPressure", "StockSize","SBL","FisheriesGuild")
-
+write.taf(clean_status, dir="data", quote=TRUE)
 
 # 3: STECF landings and effort
 

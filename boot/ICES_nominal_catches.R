@@ -11,6 +11,6 @@ official <- load_official_catches()
 official <- official[, -1]
 # colnames(official)[1] <- "Species"
 
-write.taf(official, file = "boot/initial/data/ICES_2006_2020_catches.csv", quote = TRUE)
+write.taf(official, file = "boot/initial/data/ICES_2006_2022_catches.csv", quote = TRUE)
 
 
