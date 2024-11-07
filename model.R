@@ -22,11 +22,11 @@ sag_trends <- stock_trends(sag_complete_frmt)
 
 #Check if this still applies in 2023
 
-sag_trends <- trends[!(trends$StockKeyLabel == "whb.27.1-91214" & trends$Metric == "F_FMEAN" & trends$Year == 2022) &
-                         !(trends$StockKeyLabel == "whb.27.1-91214" & trends$Metric == "F_FMSY" & trends$Year == 2022) &
-                         !(trends$StockKeyLabel == "MEAN" & trends$Metric == "F_FMSY" & trends$Year == 2022) &
-                         !(trends$StockKeyLabel == "whb.27.1-91214" & trends$Metric == "SSB_MSYBtrigger" & trends$Year == 2023) &
-                         !(trends$StockKeyLabel == "MEAN" & trends$Metric == "SSB_MSYBtrigger" & trends$Year == 2023),]
+# sag_trends <- trends[!(trends$StockKeyLabel == "whb.27.1-91214" & trends$Metric == "F_FMEAN" & trends$Year == 2022) &
+#                          !(trends$StockKeyLabel == "whb.27.1-91214" & trends$Metric == "F_FMSY" & trends$Year == 2022) &
+#                          !(trends$StockKeyLabel == "MEAN" & trends$Metric == "F_FMSY" & trends$Year == 2022) &
+#                          !(trends$StockKeyLabel == "whb.27.1-91214" & trends$Metric == "SSB_MSYBtrigger" & trends$Year == 2023) &
+#                          !(trends$StockKeyLabel == "MEAN" & trends$Metric == "SSB_MSYBtrigger" & trends$Year == 2023),]
 
 
 

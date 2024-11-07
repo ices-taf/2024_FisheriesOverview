@@ -133,29 +133,6 @@ sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <
 
 sag_status <- load_sag_status_new(sag)
 
-# names(sag_status)
-
-# GS_stocks <-  c("aru.27.5a14",
-                "usk.27.5a14",
-                # "her.27.1-24a514a",
-                "rng.27.1245a8914ab",
-                "cod.2127.1f14",
-                "rhg.27.nea",
-                # "cap.27.2a514",
-                # "whb.27.1-91214",
-                "bli.27.5a14",
-                # "pra.27.1-2",
-                "ghl.27.561214",
-                # "mac.27.nea",
-                "reb.2127.dp",
-                "reb.2127.sp",
-                "reb.27.14b",
-                "reg.27.561214"
-# )
-
-# stocks <- unique(sag_complete_frmt$StockKeyLabel)
-# sag_status <- dplyr::filter(sag_status, StockKeyLabel %in% stocks)
-
 
 #rename the components of North Sea cod and ane in 9a and remove the general assessment:
 
@@ -179,10 +156,16 @@ library(operators)
 sag_status <- dplyr::filter(sag_status, StockKeyLabel %!in% out)
 detach("package:operators", unload=TRUE)
 
-clean_status <- format_sag_status_new(sag_status, sid)
+clean_status <- format_sag_status_new(sag_status)
 names(clean_status)
-colnames(clean_status)<- c("StockKeyLabel", "AssessmentKey","lineDescription","FishingPressure", "StockSize","SBL","FisheriesGuild")
+colnames(clean_status)<- c("StockKeyLabel", "AssessmentKey","lineDescription","FishingPressure", "StockSize","SBL")
+guild <- sid %>% select(StockKeyLabel, FisheriesGuild)
 
+clean_status <- left_join(clean_status, guild)
+# clean_status <- format_sag_status(sag_status)
+clean_status$FisheriesGuild[which(clean_status$AssessmentKey == "18715")] <- "Demersal"
+clean_status$FisheriesGuild[which(clean_status$AssessmentKey == "18719")] <- "Demersal"
+clean_status$FisheriesGuild[which(clean_status$AssessmentKey == "18716")] <- "Demersal"
 
 # 3: STECF landings and effort
 

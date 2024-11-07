@@ -27,7 +27,7 @@ catch_dat <- read.taf("data/catch_dat.csv")
 #Plot
 plot_catch_trends(catch_dat, type = "COMMON_NAME", line_count = 10, plot_type = "line")
 plot_catch_trends(catch_dat, type = "COMMON_NAME", line_count = 6, plot_type = "line")
-ggplot2::ggsave(paste0(year_cap, "_", ecoreg,"_FO_Catches_species.png"), path = "report/", width = 170, height = 100.5, units = "mm", dpi = 300)
+ggplot2::ggsave(paste0(year_cap, "_", ecoreg,"_FO_Catches_speciestop10.png"), path = "report/", width = 170, height = 100.5, units = "mm", dpi = 300)
 
 #data
 dat <- plot_catch_trends(catch_dat, type = "COMMON_NAME", line_count = 11, plot_type = "line", return_data = TRUE)
@@ -48,7 +48,7 @@ dat1 <- dat %>% group_by(type_var)%>%
 # By country
 #~~~~~~~~~~~~~~~#
 #Plot
-plot_catch_trends(catch_dat, type = "COUNTRY", line_count = 9, plot_type = "area")
+plot_catch_trends(catch_dat, type = "COUNTRY", line_count = 10, plot_type = "area")
 ggplot2::ggsave(paste0(year_cap, "_", ecoreg,"_FO_Catches_country.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
 
 #data

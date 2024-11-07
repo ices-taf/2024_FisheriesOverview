@@ -9,8 +9,8 @@ source("bootstrap/utilities.r")
 
 # set values for automatic naming of files:
 cap_year <- 2024
-cap_month <- "October"
-ecoreg_code <- "NrS"
+cap_month <- "November"
+ecoreg_code <- "GS"
 
 ##########
 #Load data
@@ -44,9 +44,12 @@ write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Trends_demersal", ext =
 # 2. Pelagic
 #~~~~~~~~~~~
 plot_stock_trends(sag_trends, guild="pelagic", cap_year, cap_month , return_data = FALSE)
+#remove her.27.1-24a514a in NrS
+sag_trends_bis <- sag_trends %>% filter(StockKeyLabel != "her.27.1-24a514a")
+plot_stock_trends(sag_trends_bis, guild="pelagic", cap_year, cap_month , return_data = FALSE)
 ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_Trends_pelagic", ext = "png", dir = "report"), width = 178, height = 130, units = "mm", dpi = 300)
 
-dat <- plot_stock_trends(sag_trends, guild="pelagic", cap_year, cap_month , return_data = TRUE)
+dat <- plot_stock_trends(sag_trends_bis, guild="pelagic", cap_year, cap_month , return_data = TRUE)
 write.taf(dat,file =file_name(cap_year,ecoreg_code,"SAG_Trends_pelagic", ext = "csv", dir = "report"))
 
 unique(sag_trends$FisheriesGuild)
@@ -104,7 +107,33 @@ ggplot2::ggsave(paste0(cap_year, "_", ecoreg_code, "_EO_SAG_GuildTrends_F.png"),
 # ggplot2::ggsave("2019_BtS_EO_GuildTrends_noMEAN_F.png", path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
 
 
-trends3 <- trends2%>% filter(Metric == "SSB_MSYBtrigger")
+trends2 <- sag_trends%>% filter(Metric == "F_FMSY")
+plot_guild_trends(trends2, cap_year, cap_month,return_data = FALSE )
+trends2 <- trends2 %>% filter(StockKeyLabel == "MEAN")
+trends2 <- trends2 %>% filter(Year > 1960)
+plot_guild_trends(trends2, cap_year, cap_month,return_data = FALSE )
+
+# guild2 <- guild2 %>% filter(FisheriesGuild != "MEAN")
+# plot_guild_trends(guild2, cap_year , cap_month,return_data = FALSE )
+ggplot2::ggsave(paste0(cap_year, "_", ecoreg_code, "_EO_SAG_GuildTrends_F.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
+
+
+
+
+
+trends2 <- sag_trends%>% filter(Metric == "SSB_MSYBtrigger")
+trends2 <- trends2 %>% filter(StockKeyLabel == "MEAN")
+trends2 <- trends2 %>% filter(Year > 1960)
+plot_guild_trends(trends2, cap_year, cap_month,return_data = FALSE )
+
+# guild2 <- guild2 %>% filter(FisheriesGuild != "MEAN")
+# plot_guild_trends(guild2, cap_year , cap_month,return_data = FALSE )
+ggplot2::ggsave(paste0(cap_year, "_", ecoreg_code, "_EO_SAG_GuildTrends_SSB.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
+
+
+
+
+# trends3 <- trends2%>% filter(Metric == "SSB_MSYBtrigger")
 
 # guild2 <- guild %>% filter(Metric == "SSB_MSYBtrigger")
 # guild3 <- guild2 %>% dplyr::filter(FisheriesGuild != "MEAN")
@@ -113,16 +142,16 @@ plot_guild_trends(trends3, cap_year, cap_month,return_data = FALSE )
 ggplot2::ggsave(paste0(cap_year, "_", ecoreg_code, "_EO_SAG_GuildTrends_SSB_1960.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
 # ggplot2::ggsave(paste0(year_cap, "_", ecoreg, "_EO_SAG_GuildTrends_SSB_1900.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
 
-dat <- plot_guild_trends(trends2, cap_year, cap_month ,return_data = TRUE)
+dat <- plot_guild_trends(sag_trends, cap_year, cap_month ,return_data = TRUE)
 write.taf(dat, file =paste0(cap_year, "_", ecoreg_code, "_EO_SAG_GuildTrends.csv"), dir = "report" )
 
-# dat <- trends2[,1:2]
-# dat <- unique(dat)
-# dat <- dat %>% filter(FisheriesGuild != "MEAN")
-# colnames(dat) <- c("StockKeyLabel", "Year")
-# dat2 <- sid %>% select(c(StockKeyLabel, StockKeyDescription))
-# dat <- left_join(dat,dat2)
-# write.taf(dat, file =paste0(year_cap, "_", ecoreg_code, "_EO_SAG_SpeciesGuildList.csv"), dir = "report", quote = TRUE )
+dat <- sag_trends[,1:2]
+dat <- unique(dat)
+dat <- dat %>% filter(StockKeyLabel != "MEAN")
+colnames(dat) <- c("StockKeyLabel", "Year")
+dat2 <- sid %>% select(c(StockKeyLabel, StockKeyDescription))
+dat <- left_join(dat,dat2)
+write.taf(dat, file =paste0(year_cap, "_", ecoreg_code, "_EO_SAG_SpeciesGuildList.csv"), dir = "report", quote = TRUE )
 
 
 #~~~~~~~~~~~~~~~#
@@ -234,10 +263,10 @@ write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_benthic", e
 
 kobe <- plot_kobe(sag_catch_current, guild = "benthic", caption = T, cap_year , cap_month, return_data = FALSE)
 png(file_name(cap_year,ecoreg_code,"SAG_Current_benthic", ext = "png", dir = "report"),
-    width = 131.32,
-    height = 88.9,
+    width = 300.32,
+    height = 120.9,
     units = "mm",
-    res = 300)
+    res = 800)
 p1_plot<-gridExtra::grid.arrange(kobe,
                                  bar, ncol = 2,
                                  respect = TRUE, top = "benthic")
@@ -289,8 +318,15 @@ dev.off()
                 
 discardsA <- plot_discard_trends(sag_catch_trends, 2024, cap_year , cap_month )
 
+#for North sea
+sag_catch_trends <- sag_catch_trends %>% filter(FisheriesGuild != "elasmobranch")
+discardsA <- plot_discard_trends(sag_catch_trends, 2024, cap_year , cap_month )
+
 dat <- plot_discard_trends(sag_catch_trends, 2024, cap_year , cap_month , return_data = TRUE)
+write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_trends_noelasmo", ext = "csv", dir = "report" ))
+
 write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_trends", ext = "csv", dir = "report" ))
+
 
 catch_trends2 <- sag_catch_trends %>% filter(Discards > 0)
 discardsB <- plot_discard_current(catch_trends2, year,position_letter = "b)", cap_year , cap_month , caption = FALSE)
@@ -304,13 +340,13 @@ discardsC <- plot_discard_current(sag_catch_trends, 2024,position_letter = "c)",
 dat <- plot_discard_current(sag_catch_trends, 2024, cap_year, cap_month , return_data = TRUE)
 #this does not work
 #write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all", ext = "csv"), dir = "report" )
-write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all", ext = "csv", dir = "report" ))
+write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all_noelasmo", ext = "csv", dir = "report" ))
 
 #this does not work
 # cowplot::plot_grid(discardsA, discardsB,discardsC, align = "h", nrow = 1, rel_widths = 1, rel_heights = 1)
 # ggplot2::ggsave(file_name(cap_year,ecoreg_code,"_FO_SAG_Discards", ext = "png"), path = "report/", width = 220.32, height = 88.9, units = "mm", dpi = 300)
 
-png(file_name(cap_year,ecoreg_code,"SAG_Discards", ext = "png", dir = "report"),
+png(file_name(cap_year,ecoreg_code,"SAG_Discards_noelasmo", ext = "png", dir = "report"),
     width = 220.32,
     height = 88.9,
     units = "mm",
