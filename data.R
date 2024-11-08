@@ -161,31 +161,6 @@ sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <
 
 sag_status <- load_sag_status_new(sag)
 
-<<<<<<< HEAD
-=======
-# names(sag_status)
-
-Barents_stockList <- c("aru.27.123a4",
-                       "cap.27.1-2",
-                       "cod.27.1-2",
-                       "cod.27.1-2.coastN",
-                       "gfb.27.nea",
-                       "ghl.27.1-2",
-                       "had.27.1-2",
-                       "lin.27.1-2",
-                       "pok.27.1-2",
-                       "pra.27.1-2",
-                       "reb.27.1-2",
-                       "reg.27.1-2",
-                       "rjr.27.23a4",
-                       "rng.27.1245a8914ab",
-                       "tsu.27.nea",
-                       "usk.27.1-2")
-
-# stocks <- unique(sag_complete_frmt$StockKeyLabel)
-# sag_status <- dplyr::filter(sag_status, StockKeyLabel %in% stocks)
-
->>>>>>> ea4aae232f87f06e1ccf029629d42c9108689e96
 
 #rename the components of North Sea cod and ane in 9a and remove the general assessment:
 
