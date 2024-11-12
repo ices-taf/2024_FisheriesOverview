@@ -6,7 +6,7 @@ file_name <- function(year, ecoregion, name, ext = "", dir = c("bootstrap", "dat
   # sprintf("%s_%s_FO_%s%s",year,ecoregion,name, ext)
 }
 
-ecoregion <- "Norwegian Sea"
+ecoregion <- "Oceanic Northeast Atlantic"
 
 
 ecoregions <- c("Baltic Sea", "Bay of Biscay and Iberian Coast", "Celtic Seas", "Greater North Sea",  "Norwegian Sea", "Icelandic Waters", "Barents Sea", "Greenland Sea", "Faroes", "Oceanic Northeast Atlantic", "Azores")

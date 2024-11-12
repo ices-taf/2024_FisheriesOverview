@@ -10,7 +10,7 @@ source("boot/utilities.r")
 # set values for automatic naming of files:
 cap_year <- 2024
 cap_month <- "November"
-ecoreg_code <- "NwS"
+ecoreg_code <- "ONA"
 
 ##########
 #Load data
@@ -53,10 +53,10 @@ unique(sag_trends$FisheriesGuild)
 
 # 3. Crustacean
 #~~~~~~~~~~~
-plot_stock_trends(sag_trends, guild="crustacean", cap_year , cap_month ,return_data = FALSE )
+plot_stock_trends(trends, guild="crustacean", cap_year , cap_month ,return_data = FALSE )
 ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_Trends_crustacean", ext = "png", dir = "report"), width = 178, height = 130, units = "mm", dpi = 300)
 
-dat <- plot_stock_trends(sag_trends, guild="crustacean", cap_year , cap_month , return_data = TRUE)
+dat <- plot_stock_trends(trends, guild="crustacean", cap_year , cap_month , return_data = TRUE)
 write.taf(dat,file =file_name(cap_year,ecoreg_code,"SAG_Trends_crustacean", ext = "csv", dir = "report"))
 
 # 4. Benthic
@@ -228,7 +228,7 @@ p1_plot<-gridExtra::grid.arrange(kobe,
                                  respect = TRUE, top = "crustacean")
 dev.off()
 
-# 2. Benthic
+# 4. Benthic
 #~~~~~~~~~~~
 bar <- plot_CLD_bar(sag_catch_current, guild = "benthic", caption = T, cap_year, cap_month , return_data = FALSE)
 
@@ -247,6 +247,25 @@ p1_plot<-gridExtra::grid.arrange(kobe,
                                  respect = TRUE, top = "benthic")
 dev.off()
 
+
+# 4. Elasmobranch
+#~~~~~~~~~~~
+bar <- plot_CLD_bar(sag_catch_current, guild = "elasmobranch", caption = T, cap_year, cap_month , return_data = FALSE)
+
+
+bar_dat <- plot_CLD_bar(sag_catch_current, guild = "elasmobranch", caption = T, cap_year , cap_month , return_data = TRUE)
+write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_elasmobranch", ext = "csv", dir = "report"))
+
+kobe <- plot_kobe(sag_catch_current, guild = "elasmobranch", caption = T, cap_year , cap_month, return_data = FALSE)
+png(file_name(cap_year,ecoreg_code,"SAG_Current_elasmobranch", ext = "png", dir = "report"),
+    width = 131.32,
+    height = 88.9,
+    units = "mm",
+    res = 300)
+p1_plot<-gridExtra::grid.arrange(kobe,
+                                 bar, ncol = 2,
+                                 respect = TRUE, top = "elasmobranch")
+dev.off()
 
 # 6. All
 #~~~~~~~~~~~
@@ -304,8 +323,8 @@ dat <- plot_discard_current(catch_trends2, 2024, cap_year, cap_month , return_da
 write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_onlydiscardsexist", ext = "csv", dir = "report" ))
 
 
-discardsC <- plot_discard_current(sag_catch_trends, 2024,position_letter = "c)", cap_year, cap_month )
-dat <- plot_discard_current(sag_catch_trends, 2024, cap_year, cap_month , return_data = TRUE)
+discardsC <- plot_discard_current_order(sag_catch_trends, 2024,position_letter = "c)", cap_year, cap_month )
+dat <- plot_discard_current_order(sag_catch_trends, 2024, cap_year, cap_month , return_data = TRUE)
 #this does not work
 #write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all", ext = "csv"), dir = "report" )
 write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all", ext = "csv", dir = "report" ))

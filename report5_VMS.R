@@ -10,8 +10,8 @@ source("bootstrap/utilities.r")
 mkdir("report")
 # set values for automatic naming of files:
 cap_year <- 2024
-cap_month <- "October"
-ecoreg_code <- "BI"
+cap_month <- "November"
+ecoreg_code <- "ONA"
 
 ###########
 ##Load data

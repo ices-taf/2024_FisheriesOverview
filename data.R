@@ -24,15 +24,15 @@ catch_dat <-
 
 
 
-out <-unique(grep("erring", catch_dat$COMMON_NAME, value = TRUE))
-#[1] "Pacific herring"  "Atlantic herring"
-out2<-unique(grep("ackerel", catch_dat$COMMON_NAME, value = TRUE))
-out3<-unique(grep("lue whiting", catch_dat$COMMON_NAME, value = TRUE))
-out <- append(out, out2)
-out <- append(out, out3)
+# out <-unique(grep("erring", catch_dat$COMMON_NAME, value = TRUE))
+# #[1] "Pacific herring"  "Atlantic herring"
+# out2<-unique(grep("ackerel", catch_dat$COMMON_NAME, value = TRUE))
+# out3<-unique(grep("lue whiting", catch_dat$COMMON_NAME, value = TRUE))
+# out <- append(out, out2)
+# out <- append(out, out3)
 
-# library(operators)
-catch_dat <- dplyr::filter(catch_dat, !COMMON_NAME %in% out)
+# # library(operators)
+# catch_dat <- dplyr::filter(catch_dat, !COMMON_NAME %in% out)
 # detach("package:operators", unload=TRUE)
 
 
@@ -78,11 +78,11 @@ catch_dat$GUILD[which(catch_dat$COMMON_NAME == "Pacific cupped oyster")] <- "cru
 catch_dat$GUILD <- tolower(catch_dat$GUILD)
 
 catch_dat <- unique(catch_dat)
-dim(catch_dat_test)
-dim(catch_dat)
-# find dumplicates
-duplicates <- catch_dat[duplicated(catch_dat),]
-unique(duplicates$VALUE)
+# dim(catch_dat_test)
+# dim(catch_dat)
+# # find dumplicates
+# duplicates <- catch_dat[duplicated(catch_dat),]
+# unique(duplicates$VALUE)
 # catches_frmt <- format_catches_noecoregion(hist, official, species_list, sid)
 
 
@@ -110,11 +110,11 @@ write.taf(catch_dat, dir = "data", quote = TRUE)
 
 
 #2023 update: This cods are still to be checked, this one is not showing up, I guess because of SID
-sag_complete$FMSY[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 0.176
-sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 67743
+# sag_complete$FMSY[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 0.176
+# sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 67743
 
-sag_complete$FMSY[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 0.176
-sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 67743
+# sag_complete$FMSY[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 0.176
+# sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 67743
 
 
 # 2022 update: this still applies: ??
@@ -190,8 +190,8 @@ Barents_stockList <- c("aru.27.123a4",
                        "tsu.27.nea",
                        "usk.27.1-2")
 
-# stocks <- unique(sag_complete_frmt$StockKeyLabel)
-# sag_status <- dplyr::filter(sag_status, StockKeyLabel %in% stocks)
+stocks <- unique(sag_complete_frmt$StockKeyLabel)
+sag_status <- dplyr::filter(sag_status, StockKeyLabel %in% stocks)
 
 
 #rename the components of North Sea cod and ane in 9a and remove the general assessment:
