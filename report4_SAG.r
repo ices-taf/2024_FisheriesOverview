@@ -327,6 +327,12 @@ write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_trends_noelasm
 
 write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_trends", ext = "csv", dir = "report" ))
 
+discardsC <- plot_discard_current(sag_catch_trends, 2024,position_letter = "b)", cap_year, cap_month )
+dat <- plot_discard_current(sag_catch_trends, 2024, cap_year, cap_month , return_data = TRUE)
+#this does not work
+#write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all", ext = "csv"), dir = "report" )
+write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all_noelasmo", ext = "csv", dir = "report" ))
+
 
 catch_trends2 <- sag_catch_trends %>% filter(Discards > 0)
 discardsB <- plot_discard_current_order(catch_trends2, 2024,dat,position_letter = "c)", cap_year , cap_month , caption = TRUE)
@@ -336,11 +342,6 @@ dat <- plot_discard_current(catch_trends2, 2024, cap_year, cap_month , return_da
 write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_onlydiscardsexist", ext = "csv", dir = "report" ))
 
 
-discardsC <- plot_discard_current(sag_catch_trends, 2024,position_letter = "b)", cap_year, cap_month )
-dat <- plot_discard_current(sag_catch_trends, 2024, cap_year, cap_month , return_data = TRUE)
-#this does not work
-#write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all", ext = "csv"), dir = "report" )
-write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all_noelasmo", ext = "csv", dir = "report" ))
 
 #this does not work
 # cowplot::plot_grid(discardsA, discardsB,discardsC, align = "h", nrow = 1, rel_widths = 1, rel_heights = 1)
