@@ -10,7 +10,7 @@ source("boot/utilities.r")
 # set values for automatic naming of files:
 cap_year <- 2024
 cap_month <- "November"
-ecoreg_code <- "GS"
+ecoreg_code <- "BtS"
 
 ##########
 #Load data
@@ -262,11 +262,11 @@ bar_dat <- plot_CLD_bar(sag_catch_current, guild = "benthic", caption = T, cap_y
 write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_benthic", ext = "csv", dir = "report"))
 
 kobe <- plot_kobe(sag_catch_current, guild = "benthic", caption = T, cap_year , cap_month, return_data = FALSE)
-png(file_name(cap_year,ecoreg_code,"SAG_Current_benthic", ext = "png", dir = "report"),
+png(file_name(cap_year,ecoreg_code,"SAG_Current_benthic_barsOk", ext = "png", dir = "report"),
     width = 300.32,
     height = 120.9,
     units = "mm",
-    res = 800)
+    res = 300)
 p1_plot<-gridExtra::grid.arrange(kobe,
                                  bar, ncol = 2,
                                  respect = TRUE, top = "benthic")
@@ -329,14 +329,14 @@ write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_trends", ext =
 
 
 catch_trends2 <- sag_catch_trends %>% filter(Discards > 0)
-discardsB <- plot_discard_current(catch_trends2, 2024,position_letter = "b)", cap_year , cap_month , caption = FALSE)
+discardsB <- plot_discard_current_order(catch_trends2, 2024,dat,position_letter = "c)", cap_year , cap_month , caption = TRUE)
 dat <- plot_discard_current(catch_trends2, 2024, cap_year, cap_month , return_data = TRUE)
 #this does not work
 # write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_", ext = "csv"), dir = "report" )
 write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_onlydiscardsexist", ext = "csv", dir = "report" ))
 
 
-discardsC <- plot_discard_current(sag_catch_trends, 2024,position_letter = "c)", cap_year, cap_month )
+discardsC <- plot_discard_current(sag_catch_trends, 2024,position_letter = "b)", cap_year, cap_month )
 dat <- plot_discard_current(sag_catch_trends, 2024, cap_year, cap_month , return_data = TRUE)
 #this does not work
 #write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all", ext = "csv"), dir = "report" )
@@ -352,8 +352,8 @@ png(file_name(cap_year,ecoreg_code,"SAG_Discards_noelasmo", ext = "png", dir = "
     units = "mm",
     res = 300)
 p1_plot<-gridExtra::grid.arrange(discardsA,
-                                 discardsB,
-                                 discardsC, ncol = 3,
+                                 discardsC,
+                                 discardsB, ncol = 3,
                                  respect = TRUE)
 dev.off()
 
