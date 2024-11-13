@@ -159,7 +159,7 @@ sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "pok.27.1-2")] <
 sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$FishSStockKeyLabeltock == "pok.27.1-2")] <- 226430
 
 sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "cod.27.1-2.coastN")] <- 0.176
-# sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 46723
+sag_complete$MSYBtrigger[which(sag_complete$FishStock == "cod.27.1-2.coastN")] <- 46723
 
 sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "dgs.27.nea")] <- 0.043
 sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "dgs.27.nea")] <- 650770

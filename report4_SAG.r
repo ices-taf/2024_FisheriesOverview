@@ -7,10 +7,7 @@ library(dplyr)
 ## Run utilies
 source("boot/utilities.r")
 
-# set values for automatic naming of files:
-cap_year <- 2024
-cap_month <- "November"
-ecoreg_code <- "ONA"
+
 
 ##########
 #Load data
@@ -323,8 +320,8 @@ dat <- plot_discard_current(catch_trends2, 2024, cap_year, cap_month , return_da
 write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_onlydiscardsexist", ext = "csv", dir = "report" ))
 
 
-discardsC <- plot_discard_current_order(sag_catch_trends, 2024,position_letter = "c)", cap_year, cap_month )
-dat <- plot_discard_current_order(sag_catch_trends, 2024, cap_year, cap_month , return_data = TRUE)
+discardsC <- plot_discard_current_order(sag_catch_trends, 2024,dat,position_letter = "c)", cap_year, cap_month )
+dat <- plot_discard_current_order(sag_catch_trends, 2024, dat, cap_year, cap_month , return_data = TRUE)
 #this does not work
 #write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all", ext = "csv"), dir = "report" )
 write.taf(dat, file =file_name(cap_year,ecoreg_code,"SAG_Discards_current_all", ext = "csv", dir = "report" ))
@@ -339,8 +336,8 @@ png(file_name(cap_year,ecoreg_code,"SAG_Discards", ext = "png", dir = "report"),
     units = "mm",
     res = 300)
 p1_plot<-gridExtra::grid.arrange(discardsA,
-                                 discardsB,
-                                 discardsC, ncol = 3,
+                                 discardsC,
+                                 discardsB, ncol = 3,
                                  respect = TRUE)
 dev.off()
 

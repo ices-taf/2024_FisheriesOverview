@@ -11,3 +11,7 @@ ecoregion <- "Oceanic Northeast Atlantic"
 
 ecoregions <- c("Baltic Sea", "Bay of Biscay and Iberian Coast", "Celtic Seas", "Greater North Sea",  "Norwegian Sea", "Icelandic Waters", "Barents Sea", "Greenland Sea", "Faroes", "Oceanic Northeast Atlantic", "Azores")
 
+# set values for automatic naming of files:
+cap_year <- 2024
+cap_month <- "November"
+ecoreg_code <- "ONA"
