@@ -6,7 +6,7 @@ file_name <- function(year, ecoregion, name, ext = "", dir = c("bootstrap", "dat
   # sprintf("%s_%s_FO_%s%s",year,ecoregion,name, ext)
 }
 
-ecoregion <- "Oceanic Northeast Atlantic"
+ecoregion <- "Baltic Sea"
 
 
 ecoregions <- c("Baltic Sea", "Bay of Biscay and Iberian Coast", "Celtic Seas", "Greater North Sea",  "Norwegian Sea", "Icelandic Waters", "Barents Sea", "Greenland Sea", "Faroes", "Oceanic Northeast Atlantic", "Azores")
@@ -14,4 +14,4 @@ ecoregions <- c("Baltic Sea", "Bay of Biscay and Iberian Coast", "Celtic Seas", 
 # set values for automatic naming of files:
 cap_year <- 2024
 cap_month <- "November"
-ecoreg_code <- "ONA"
+ecoreg_code <- "BtS"
