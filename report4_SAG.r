@@ -185,7 +185,7 @@ dev.off()
 
 
 
-#for top 20 demersal (NrS)
+#for top 20 demersal (NrS and CS)
 top_20 <- bar_dat %>% top_n(20, total)
 bar <- plot_CLD_bar(top_20, guild = "demersal", caption = TRUE, cap_year = 2024, cap_month = "October", return_data = FALSE)
 bar_dat <- plot_CLD_bar(top_20, guild = "demersal", caption = T, cap_year , cap_month , return_data = TRUE)
@@ -318,7 +318,7 @@ dev.off()
                 
 discardsA <- plot_discard_trends(sag_catch_trends, 2024, cap_year , cap_month )
 
-#for North sea
+#for North sea and CS
 sag_catch_trends <- sag_catch_trends %>% filter(FisheriesGuild != "elasmobranch")
 discardsA <- plot_discard_trends(sag_catch_trends, 2024, cap_year , cap_month )
 
@@ -381,12 +381,14 @@ unique(clean_status$StockSize)
  
 clean_status$StockSize <- gsub("qual_GREEN", "GREEN", clean_status$StockSize)
 clean_status$StockSize <- gsub("qual_RED", "RED", clean_status$StockSize)
+clean_status$StockSize <- gsub("UNDEFINED", "GREY", clean_status$StockSize)
 
 
 unique(clean_status$FishingPressure)
 
 clean_status$FishingPressure <- gsub("qual_RED", "RED", clean_status$FishingPressure)
 clean_status$FishingPressure <- gsub("qual_GREEN", "GREEN", clean_status$FishingPressure)
+clean_status$FishingPressure <- gsub("UNDEFINED", "GREY", clean_status$FishingPressure)
 
 plot_status_prop_pies(clean_status, cap_month,cap_year)
 ggplot2::ggsave(file_name(cap_year,ecoreg_code,"SAG_ICESpies", ext = "png", dir = "report"), width = 178, height = 178, units = "mm", dpi = 300)
@@ -407,7 +409,6 @@ write.taf(dat, file= file_name(cap_year,ecoreg_code,"SAG_GESpies", ext = "csv", 
 #~~~~~~~~~~~~~~~#
 #F. ANNEX TABLE 
 #~~~~~~~~~~~~~~~#
-
 
 
 

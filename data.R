@@ -24,15 +24,15 @@ catch_dat <-
 
 
 
-out <-unique(grep("erring", catch_dat$COMMON_NAME, value = TRUE))
-#[1] "Pacific herring"  "Atlantic herring"
-out2<-unique(grep("ackerel", catch_dat$COMMON_NAME, value = TRUE))
-out3<-unique(grep("lue whiting", catch_dat$COMMON_NAME, value = TRUE))
-out <- append(out, out2)
-out <- append(out, out3)
-
+# out <-unique(grep("erring", catch_dat$COMMON_NAME, value = TRUE))
+# #[1] "Pacific herring"  "Atlantic herring"
+# out2<-unique(grep("ackerel", catch_dat$COMMON_NAME, value = TRUE))
+# out3<-unique(grep("lue whiting", catch_dat$COMMON_NAME, value = TRUE))
+# out <- append(out, out2)
+# out <- append(out, out3)
+# 
 # library(operators)
-catch_dat <- dplyr::filter(catch_dat, !COMMON_NAME %in% out)
+# catch_dat <- dplyr::filter(catch_dat, !COMMON_NAME %in% out)
 # detach("package:operators", unload=TRUE)
 
 
@@ -80,6 +80,28 @@ catch_dat$GUILD <- tolower(catch_dat$GUILD)
 catch_dat <- unique(catch_dat)
 
 # catches_frmt <- format_catches_noecoregion(hist, official, species_list, sid)
+
+
+#For Azores:
+update <- read.csv("species_classification_azores.csv")
+check <- catch_dat %>% filter(COMMON_NAME %in% update$COMMON_NAME)
+check <- check %>% left_join(update, by= "COMMON_NAME")
+names(check)
+check <- check[,-c(4,11,12)]
+names(check)
+colnames(check) <- c("YEAR","COUNTRY","ISO3","ECOREGION","SPECIES_NAME","SPECIES_CODE","COMMON_NAME","VALUE", "GUILD")
+
+out <- update$COMMON_NAME
+library(operators)
+catch_dat <- dplyr::filter(catch_dat, COMMON_NAME %!in% out)
+detach("package:operators", unload=TRUE)
+
+catch_dat <- rbind(catch_dat,check)
+
+catch_dat$GUILD <- tolower(catch_dat$GUILD)
+
+catch_dat <- unique(catch_dat)
+
 
 
 write.taf(catch_dat, dir = "data", quote = TRUE)
@@ -138,9 +160,6 @@ detach("package:operators", unload=TRUE)
 
 #2024 update
 sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "bli.27.5a14")] <- "800"
-
-
-#2023 update, do these still apply?, they do not show up
 sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "ple.27.7e")] <- "0.39"
 sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <- "11527.9"
 sag_complete_frmt$FMSY[which(sag_complete_frmt$StockKeyLabel == "spr.27.7de")] <- "0.0857"
@@ -188,6 +207,23 @@ clean_status <- format_sag_status_new(sag_status)
 names(clean_status)
 colnames(clean_status)<- c("StockKeyLabel", "AssessmentKey","lineDescription","FishingPressure", "StockSize","SBL")
 guild <- sid %>% select(StockKeyLabel, FisheriesGuild)
+
+#Duplicate rows in guild and then change the names
+
+cod <- guild %>% filter(StockKeyLabel== "cod.27.46a7d20")
+cod$StockKeyLabel <- "cod.27.46a7d20NW"
+guild <- rbind(guild, cod)
+cod <- guild %>% filter(StockKeyLabel== "cod.27.46a7d20")
+cod$StockKeyLabel <- "cod.27.46a7d20V"
+guild <- rbind(guild, cod)
+guild$StockKeyLabel[which(guild$StockKeyLabel == "cod.27.46a7d20")] <- "cod.27.46a7d20S"
+
+ane <- guild %>% filter(StockKeyLabel== "ane.27.9a")
+ane$StockKeyLabel <- "ane.27.9aS"
+guild <- rbind(guild, ane)
+guild$StockKeyLabel[which(guild$StockKeyLabel == "ane.27.9a")] <- "ane.27.9aW"
+
+
 
 clean_status <- left_join(clean_status, guild)
 # clean_status <- format_sag_status(sag_status)
