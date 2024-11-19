@@ -54,6 +54,7 @@ catch_dat$GUILD[which(catch_dat$COMMON_NAME == "Mackerels")] <- "pelagic"
 catch_dat$GUILD[which(catch_dat$COMMON_NAME == "Chub mackerel")] <- "pelagic"
 catch_dat$COMMON_NAME[which(catch_dat$COMMON_NAME == "Jack and horse mackerels nei")] <- "Jack and horse mackerels"
 catch_dat$COMMON_NAME[which(catch_dat$COMMON_NAME == "Atlantic horse mackerel")] <- "Jack and horse mackerels"
+catch_dat$COMMON_NAME[which(catch_dat$COMMON_NAME == "horse mackerel")] <- "Jack and horse mackerels"
 catch_dat$COMMON_NAME[which(catch_dat$COMMON_NAME == "Atlantic mackerel")] <- "mackerel"
 catch_dat$GUILD[which(catch_dat$COMMON_NAME == "Jack and horse mackerels")] <- "pelagic"
 catch_dat$COMMON_NAME[which(catch_dat$COMMON_NAME == "Monkfishes nei")] <- "Anglerfishes nei"
@@ -168,7 +169,11 @@ sag_complete_frmt$MSYBtrigger[which(sag_complete_frmt$StockKeyLabel == "dgs.27.n
 write.taf(sag_complete_frmt, dir = "data", quote = TRUE)
 
 
-
+# stocks <- unique(sag[c("AssessmentKey","FishStock")])
+# status <- icesSAG::getStockStatusValues(stocks$AssessmentKey)
+# test <- do.call(rbind.data.frame, status)
+# unlist(status)
+# names(status[[1]]) == names(status[[2]])
 sag_status <- load_sag_status_new(sag)
 
 # names(sag_status)
@@ -218,9 +223,19 @@ sag_status <- dplyr::filter(sag_status, StockKeyLabel %!in% out)
 sag_status <- dplyr::filter(sag_status, !StockKeyLabel %in% out)
 detach("package:operators", unload=TRUE)
 
-clean_status <- format_sag_status_new(sag_status, sid)
+clean_status <- format_sag_status_new(sag_status)
+
 names(clean_status)
+# filter in sid status the stockkey label column and the fisheries guild column
+# names(clean_status)
+sid_status <- sid %>% select(StockKeyLabel, FisheriesGuild)
+clean_status <- merge(clean_status, sid_status, by = "StockKeyLabel", all = FALSE)
+clean_status$FisheriesGuild <- tolower(clean_status$FisheriesGuild)
+# names(sid)
+# clean_status <- test
+# take out the column SBL from clean_status
 colnames(clean_status)<- c("StockKeyLabel", "AssessmentKey","lineDescription","FishingPressure", "StockSize","SBL","FisheriesGuild")
+write.taf(sag_complete_frmt, dir = "data", quote = TRUE)
 write.taf(clean_status, dir="data", quote=TRUE)
 
 # 3: STECF landings and effort
