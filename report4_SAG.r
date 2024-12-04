@@ -91,26 +91,26 @@ unique(sag_trends$FisheriesGuild)
 #~~~~~~~~~~~~~~~~~~~~~~~~~#
 guild <- read.taf("model/guild.csv")
 
-trends2 <- trends%>% filter (StockKeyLabel %in% c("cod.2127.1f14",
-                                                  "ghl.27.561214",
-                                                  "mac.27.nea",
-                                                  "her.27.1-24a514a",
-                                                  "reg.27.561214"))
-trends2 <- trends2 [,-1]
-colnames(trends2) <- c("FisheriesGuild", "Year", "Metric", "Value")
-trends3 <- trends2%>% filter(Metric == "F_FMSY")
-# guild2 <- guild %>% filter(Metric == "F_FMSY")
-plot_guild_trends(trends3, cap_year, cap_month,return_data = FALSE )
-# guild2 <- guild2 %>% filter(FisheriesGuild != "MEAN")
-# plot_guild_trends(guild2, cap_year , cap_month,return_data = FALSE )
-ggplot2::ggsave(paste0(cap_year, "_", ecoreg_code, "_EO_SAG_GuildTrends_F.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
-# ggplot2::ggsave("2019_BtS_EO_GuildTrends_noMEAN_F.png", path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
+# trends2 <- trends%>% filter (StockKeyLabel %in% c("cod.2127.1f14",
+#                                                   "ghl.27.561214",
+#                                                   "mac.27.nea",
+#                                                   "her.27.1-24a514a",
+#                                                   "reg.27.561214"))
+# trends2 <- trends2 [,-1]
+# colnames(trends2) <- c("FisheriesGuild", "Year", "Metric", "Value")
+# trends3 <- trends2%>% filter(Metric == "F_FMSY")
+# # guild2 <- guild %>% filter(Metric == "F_FMSY")
+# plot_guild_trends(trends3, cap_year, cap_month,return_data = FALSE )
+# # guild2 <- guild2 %>% filter(FisheriesGuild != "MEAN")
+# # plot_guild_trends(guild2, cap_year , cap_month,return_data = FALSE )
+# ggplot2::ggsave(paste0(cap_year, "_", ecoreg_code, "_EO_SAG_GuildTrends_F.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
+# # ggplot2::ggsave("2019_BtS_EO_GuildTrends_noMEAN_F.png", path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
 
 
 trends2 <- sag_trends%>% filter(Metric == "F_FMSY")
 plot_guild_trends(trends2, cap_year, cap_month,return_data = FALSE )
 trends2 <- trends2 %>% filter(StockKeyLabel == "MEAN")
-trends2 <- trends2 %>% filter(Year > 1960)
+# trends2 <- trends2 %>% filter(Year > 1960)
 plot_guild_trends(trends2, cap_year, cap_month,return_data = FALSE )
 
 # guild2 <- guild2 %>% filter(FisheriesGuild != "MEAN")
@@ -129,7 +129,6 @@ plot_guild_trends(trends2, cap_year, cap_month,return_data = FALSE )
 # guild2 <- guild2 %>% filter(FisheriesGuild != "MEAN")
 # plot_guild_trends(guild2, cap_year , cap_month,return_data = FALSE )
 ggplot2::ggsave(paste0(cap_year, "_", ecoreg_code, "_EO_SAG_GuildTrends_SSB.png"), path = "report/", width = 178, height = 130, units = "mm", dpi = 300)
-
 
 
 
@@ -210,7 +209,7 @@ dev.off()
 #~~~~~~~~~~~
 #Only for Baltic
 sag_catch_current <- sag_catch_current %>% filter(StockKeyLabel != "sal.27.32")
-
+sag_catch_current$Status[which(sag_catch_current$StockKeyLabel == "her.27.28")] <- "GREEN"
 #only for North Sea
 
 sag_catch_current <- sag_catch_current %>% filter(StockKeyLabel != "her.27.1-24a514a")
@@ -262,9 +261,9 @@ bar_dat <- plot_CLD_bar(sag_catch_current, guild = "benthic", caption = T, cap_y
 write.taf(bar_dat, file =file_name(cap_year,ecoreg_code,"SAG_Current_benthic", ext = "csv", dir = "report"))
 
 kobe <- plot_kobe(sag_catch_current, guild = "benthic", caption = T, cap_year , cap_month, return_data = FALSE)
-png(file_name(cap_year,ecoreg_code,"SAG_Current_benthic_barsOk", ext = "png", dir = "report"),
+png(file_name(cap_year,ecoreg_code,"SAG_Current_benthic", ext = "png", dir = "report"),
     width = 300.32,
-    height = 120.9,
+    height = 88.9,
     units = "mm",
     res = 300)
 p1_plot<-gridExtra::grid.arrange(kobe,

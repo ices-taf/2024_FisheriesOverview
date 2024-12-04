@@ -153,7 +153,7 @@ sag_complete_frmt <- format_sag(sag, sid)
 sag_complete_frmt <- sag_complete_frmt %>% filter(StockKeyLabel %in% sid$StockKeyLabel)
 
 # Removing Russian stocks for Barents Sea
-out <- c("cap.27.1-2","cod.27.1-2","ghl.27.1-2","had.27.1-2", "reb.27.1-2")
+out <- c("cap.27.1-2","cod.27.1-2","ghl.27.1-2","had.27.1-2", "reb.27.1-2", "reg.27.1-2")
 library(operators)
 sag_complete_frmt <- dplyr::filter(sag_complete_frmt, StockKeyLabel %!in% out)
 detach("package:operators", unload=TRUE)
